@@ -1,14 +1,19 @@
 <?php
 
+use hypeJunction\Discussion;
+use hypeJunction\DiscussionReply;
+use hypeJunction\Interactions\Comment;
+use hypeJunction\Interactions\Thread;
+
 $entity = elgg_extract('topic', $vars, false);
-if (!$entity instanceof \hypeJunction\Discussion) {
+if (!$entity instanceof Discussion) {
 	return;
 }
 
 $reply = elgg_extract('reply', $vars, false);
 /* @var $reply Comment */
 
-if (!elgg_instanceof($entity)) {
+if (!$entity instanceof Discussion) {
 	return true;
 }
 
@@ -61,7 +66,7 @@ if ($order == 'asc') {
 
 $options = array(
 	'types' => 'object',
-	'subtypes' => array(hypeJunction\DiscussionReply::SUBTYPE),
+	'subtypes' => array(DiscussionReply::SUBTYPE),
 	'container_guid' => $entity->guid,
 	'list_id' => "interactions-replies-{$entity->guid}",
 	'list_class' => 'interactions-comments-list',
