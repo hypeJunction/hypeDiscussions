@@ -1,5 +1,5 @@
 {
-	"name": "hypejunction/hypeDiscussions",
+	"name": "hypejunction/hypediscussions",
 	"version": "0.0.0",
 	"type": "elgg-plugin",
 	"description": "Discussion threads for Elgg",
@@ -14,6 +14,9 @@
 			"email": "info@hypejunction.com"
 		}
 	],
+	"extra": {
+		"installer-name": "hypeDiscussions"
+	},
 	"require": {
 		"php": ">=5.5",
 		"composer/installers": "~1.0",
