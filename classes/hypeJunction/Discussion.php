@@ -38,6 +38,9 @@ class Discussion extends \ElggObject {
 	 * @return bool
 	 */
 	public function canReply($user_guid = 0) {
+		if ($this->status == 'closed') {
+			return false;
+		}
 		return $this->canWriteToContainer($user_guid, 'object', DiscussionReply::SUBTYPE);
 	}
 
