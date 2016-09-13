@@ -35,11 +35,6 @@
 
 	<suggests>
 		<type>plugin</type>
-		<name>hypeInteractions</name>
-	</suggests>
-
-	<suggests>
-		<type>plugin</type>
 		<name>group_discussion</name>
 	</suggests>
 </plugin_manifest>
