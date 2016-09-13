@@ -32,6 +32,17 @@ class DiscussionReply extends Interactions\Comment {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function canComment($user_guid = 0) {
+		$topic = $this->getOriginalContainer();
+		if ($topic->status == 'closed') {
+			return false;
+		}
+		return parent::canComment($user_guid);
+	}
+
+	/**
 	 * Discussion reply save action
 	 * @return \hypeJunction\DiscussionReply|false
 	 */
