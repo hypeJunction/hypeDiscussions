@@ -41,7 +41,7 @@ $count = $entity->countReplies();
 if (is_null($offset)) {
 	if ($reply instanceof Comment) {
 		$thread = new Thread($reply);
-		$offset = $thread->getOffset($limit);
+		$offset = $thread->getOffset($limit, $order);
 	} else {
 		if (($order == 'asc' && $style == 'load_older') || ($order == 'desc' && $style == 'load_newer')) {
 			// show last page
@@ -70,7 +70,7 @@ $options = array(
 	'container_guid' => $entity->guid,
 	'list_id' => "interactions-replies-{$entity->guid}",
 	'list_class' => 'interactions-comments-list',
-	'base_url' => "stream/replies/$entity->guid",
+	'base_url' => elgg_normalize_url("stream/replies/$entity->guid"),
 	'order_by' => $order_by,
 	'limit' => $limit,
 	'offset' => $offset,

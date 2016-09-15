@@ -7,11 +7,14 @@ $entity = \hypeJunction\DiscussionReply::saveAction();
 if ($entity) {
 	$container = $entity->getContainerEntity();
 	if (elgg_is_xhr()) {
+		$view = elgg_view('framework/interactions/replies', [
+			'topic' => $container,
+			'reply' => $entity,
+		]);
+
 		$output = array(
 			'guid' => $container->guid,
-			'view' => elgg_view_entity($entity, [
-				'full_view' => true,
-			]),
+			'view' => $view,
 			'stats' => $container->getStats(),
 		);
 		echo json_encode($output);

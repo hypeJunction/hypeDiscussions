@@ -23,10 +23,10 @@ $fields = [
 		'value' => $entity->guid,
 	],
 	[
-		'input' => 'longtext',
+		'input' => 'interactions/comment',
 		'name' => 'description',
 		'value' => $entity->description,
-		'label' => $entity ? elgg_echo('discussion:reply:edit') : elgg_echo('reply:this'),
+		'placeholder' => $entity ? elgg_echo('discussion:reply:edit') : elgg_echo('reply:this'),
 	],
 ];
 
@@ -59,7 +59,7 @@ $controls = [
 	],
 ];
 
-if (!elgg_is_xhr()) {
+if (!elgg_is_xhr() || !$entity instanceof hypeJunction\DiscussionReply) {
 	unset($controls['cancel']);
 }
 
