@@ -30,7 +30,7 @@ define(function (require) {
 			var $elem = $(this);
 
 			if ($elem.is('.elgg-menu-item-replies > a')) {
-				$elem = $elem.closest('.interactions-controls').find('.elgg-menu-interactions-tabs').find('a[data-trait="replies"]');
+				$elem = $elem.closest('.interactions-controls').find('.elgg-menu-interactions').find('.interactions-tab > a[data-trait="replies"]');
 			}
 
 			var trait = $elem.data('trait') || 'replies';

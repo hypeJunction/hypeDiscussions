@@ -61,9 +61,9 @@ function hypediscussions_interactions_menu_setup($hook, $type, $menu, $params) {
 					'name' => 'replies',
 					'text' => elgg_echo('interactions:reply:create'),
 					'href' => "stream/replies/$entity->guid",
-					'priority' => 100,
+					'priority' => 200,
 					'data-trait' => 'replies',
-					'section' => 'actions',
+					'item_class' => 'interactions-action',
 		));
 	}
 
@@ -78,9 +78,9 @@ function hypediscussions_interactions_menu_setup($hook, $type, $menu, $params) {
 					)),
 					'href' => "stream/replies/$entity->guid",
 					'selected' => ($active_tab == 'replies'),
-					'priority' => 500,
+					'priority' => 100,
 					'data-trait' => 'replies',
-					'section' => 'tabs',
+					'item_class' => 'interactions-tab',
 		));
 	}
 
