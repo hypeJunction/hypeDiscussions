@@ -1,3 +1,15 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/hypeJunction/hypeDiscussions/compare/1.0.1...v1.1.0) (2016-09-15)
+
+
+### Bug Fixes
+
+* **api:** update API to match hypeInteractions ([3df5102](https://github.com/hypeJunction/hypeDiscussions/commit/3df5102))
+* **interactions:** update interactions menu ([c7f3098](https://github.com/hypeJunction/hypeDiscussions/commit/c7f3098))
+* **river:** discussions and replies once again appear in the river ([58170ae](https://github.com/hypeJunction/hypeDiscussions/commit/58170ae))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/hypeJunction/hypeDiscussions/compare/1.0.0...v1.0.1) (2016-09-13)
 
