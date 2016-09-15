@@ -128,7 +128,9 @@ class Discussion extends \ElggObject {
 			elgg_create_river_item([
 				'view' => 'river/object/discussion/create',
 				'action_type' => 'create',
+				'subject_guid' => elgg_get_logged_in_user_guid(),
 				'object_guid' => $entity->guid,
+				'target_guid' => $entity->container_guid,
 			]);
 		}
 

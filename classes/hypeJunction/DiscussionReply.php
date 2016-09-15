@@ -108,7 +108,9 @@ class DiscussionReply extends Interactions\Comment {
 			elgg_create_river_item(array(
 				'view' => 'river/object/discussion_reply/create',
 				'action_type' => 'reply',
+				'subject_guid' => elgg_get_logged_in_user_guid(),
 				'object_guid' => $entity->guid,
+				'target_guid' => $entity->container_guid,
 			));
 		}
 
