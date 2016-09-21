@@ -1,3 +1,13 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/hypeJunction/hypeDiscussions/compare/1.1.0...v1.2.0) (2016-09-21)
+
+
+### Features
+
+* **discussion:** integrate group_discussion features ([2a9712b](https://github.com/hypeJunction/hypeDiscussions/commit/2a9712b))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/hypeJunction/hypeDiscussions/compare/1.0.1...v1.1.0) (2016-09-15)
 
