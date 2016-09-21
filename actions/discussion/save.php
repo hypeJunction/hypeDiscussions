@@ -3,6 +3,7 @@
 /**
  * Saves a discussion
  */
+
 elgg_make_sticky_form('topic');
 $entity = \hypeJunction\Discussion::saveAction();
 if ($entity) {

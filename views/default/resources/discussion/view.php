@@ -7,15 +7,10 @@ elgg_register_rss_link();
 
 elgg_entity_gatekeeper($guid, 'object', 'discussion');
 
-$topic = get_entity($guid);
+$entity = get_entity($guid);
+elgg_group_gatekeeper(true, $entity->container_guid);
 
-$container = $topic->getContainerEntity();
-
-elgg_load_js('elgg.discussion');
-
-elgg_set_page_owner_guid($container->getGUID());
-
-elgg_group_gatekeeper();
+$container = $entity->getContainerEntity();
 
 if ($container instanceof ElggGroup) {
 	$owner_url = "discussion/group/$container->guid";
@@ -24,27 +19,27 @@ if ($container instanceof ElggGroup) {
 }
 
 elgg_push_breadcrumb($container->getDisplayName(), $owner_url);
-elgg_push_breadcrumb($topic->title);
+elgg_push_breadcrumb($entity->title);
 
-$params = array(
-	'topic' => $topic,
+$content = elgg_view_entity($entity, [
+	'full_view' => true,
+]);
+
+$content .= elgg_view('discussion/replies', [
+	'topic' => $entity,
 	'reply' => get_entity($reply_guid),
-	'show_add_form' => $topic->canWriteToContainer(0, 'object', 'discussion_reply'),
-);
-
-$content = elgg_view_entity($topic, array('full_view' => true));
-$content .= elgg_view('discussion/replies', $params);
-if ($topic->status == 'closed') {
-	$content .= elgg_view('discussion/closed');
-}
+	'show_add_form' => $entity->canWriteToContainer(0, 'object', 'discussion_reply'),
+	'expand_form' => true,
+	'full_view' => true,
+]);
 
 $params = array(
 	'content' => $content,
-	'title' => $topic->title,
+	'title' => $entity->title,
 	'sidebar' => elgg_view('discussion/sidebar'),
 	'filter' => '',
 	'class' => 'elgg-discussion-layout',
 );
 $body = elgg_view_layout('content', $params);
 
-echo elgg_view_page($topic->title, $body);
+echo elgg_view_page($entity->title, $body);

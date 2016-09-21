@@ -97,27 +97,25 @@ if ($full) {
 
 	$params = array(
 		'entity' => $topic,
-		'title' => $title,
+		'title' => false,
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'tags' => $tags,
 	);
 	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
-
-	$info = elgg_view_image_block($poster_icon, $list_body);
+	$summary = elgg_view('object/elements/summary', $params);
 
 	$body = elgg_view('output/longtext', array(
 		'value' => $topic->description,
-		'class' => 'clearfix',
+		'class' => 'elgg-discussion-body clearfix',
 	));
-	$attachments = elgg_view('object/comment/elements/attachments', $vars);
 
-	if (elgg_get_plugin_setting('enable_url_previews', 'hypeInteractions')) {
-		$attachments .= elgg_view('object/comment/elements/embeds', $vars);
-	}
-
-	echo "$info$body$attachments";
+	echo elgg_view('object/elements/full', array(
+		'entity' => $topic,
+		'summary' => $summary,
+		'icon' => $poster_icon,
+		'body' => $body,
+	));
 } else {
 	// brief view
 	$subtitle = "$by_line $replies_link <span class=\"float-alt\">$reply_text</span>";

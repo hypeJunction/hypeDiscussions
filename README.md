@@ -8,3 +8,6 @@ Discussions Threads for Elgg
  * Integrates with hypeInteractions for real time updates
  * Enables replies from river
  * Adds attachments to discussions (requires hypeAttachments)
+ * Adds discussions widget to the group and user profile
+ * Restricted discussion (only group admins can start new discussions)
+ * Enables discussions outside of groups

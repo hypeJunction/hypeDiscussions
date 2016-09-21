@@ -1,168 +1,72 @@
 <?php
 
 /**
- * Discussions Threads
+ * Discussion Threads
  *
  * @author Ismayil Khayredinov <info@hypejunction.com>
  * @copyright Copyright (c) 2016, Ismayil Khayredinov
  */
+use hypeJunction\Discussions\Menus;
+use hypeJunction\Discussions\Permissions;
+use hypeJunction\Discussions\Router;
+use hypeJunction\Discussions\Views;
+
 require_once __DIR__ . '/autoloader.php';
 
-elgg_register_event_handler('init', 'system', 'hypediscussions_init');
+// Rewrite /discussions to /discussion, otherwise it's a constant hassle
+elgg_register_plugin_hook_handler('route:rewrite', 'discussions', [Router::class, 'routeDiscussions']);
 
-/**
- * Initialize the plugin
- * @return void
- */
-function hypediscussions_init() {
+elgg_register_event_handler('init', 'system', function() {
 
+	elgg_extend_view('elgg.css', 'forms/discussion/reply/save.css');
+
+	// Add a group picker before the discussions edit form
+	elgg_extend_view('forms/discussion/save', 'input/discussions/container', 100);
+
+	// Register actions
 	elgg_register_action('discussion/save', __DIR__ . '/actions/discussion/save.php');
 	elgg_register_action('discussion/reply/save', __DIR__ . '/actions/discussion/reply/save.php');
 
+	// Cleanup river menu
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
-	elgg_register_plugin_hook_handler('register', 'menu:interactions', 'hypediscussions_interactions_menu_setup');
 
-	elgg_register_plugin_hook_handler('route', 'stream', 'hypediscussions_route_stream');
-	elgg_register_plugin_hook_handler('route', 'discussion', 'hypediscussions_route_discussion');
+	// Setup interactions menu for discussions
+	elgg_register_plugin_hook_handler('register', 'menu:interactions', [Menus::class, 'setupInteractionsMenu']);
 
-	elgg_register_plugin_hook_handler('permissions_check:comment', 'object', 'hypediscussions_discussion_reply_comments');
+	// Route pages
+	elgg_register_plugin_hook_handler('route', 'stream', [Router::class, 'routeStream']);
+	elgg_register_plugin_hook_handler('route', 'discussion', [Router::class, 'routeDiscussion']);
+	elgg_register_plugin_hook_handler('route', 'groups', [Router::class, 'routeGroups']);
 
-	elgg_extend_view('elgg.css', 'forms/discussion/reply/save.css');
-}
+	// Configure permissions
+	elgg_register_plugin_hook_handler('permissions_check:comment', 'object', [Permissions::class, 'allowRepliesInThreadedDiscussions']);
+	elgg_register_plugin_hook_handler('container_permissions_check', 'object', [Permissions::class, 'fixDiscussionContainerPermissions']);
+	elgg_register_plugin_hook_handler('container_permissions_check', 'object', [Permissions::class, 'fixReplyContainerPermissions']);
 
-/**
- * Setups entity interactions menu
- *
- * @param string $hook   "register"
- * @param string $type   "menu:interactions"
- * @param array  $menu   Menu
- * @param array  $params Hook parameters
- * @uses $params['entity'] An entity that we are interacting with
- * @uses $params['active_tab'] Currently active tab, default to 'replies'
- * @return array
- */
-function hypediscussions_interactions_menu_setup($hook, $type, $menu, $params) {
+	elgg_register_plugin_hook_handler('view_vars', 'forms/discussion/save', [Views::class, 'filterDiscussionFormVars']);
 
-	$entity = elgg_extract('entity', $params, false);
-	/* @var \hypeJunction\Discussion $entity */
+	// Cleanup group_tools registrations
+	elgg_unregister_widget_type('start_discussion');
+	elgg_unregister_widget_type('group_forum_topics');
 
-	if (!elgg_instanceof($entity, 'object', 'discussion')) {
-		return $menu;
-	}
+	// Add a new discussion widget
+	elgg_register_widget_type('discussion', elgg_echo('discussion:widget'), elgg_echo('discussion:widget:desc'), ['dashboard', 'profile', 'groups']);
 
-	$active_tab = elgg_extract('active_tab', $params);
+	// Unregister discussion widget type if group forum is disabled
+	elgg_register_plugin_hook_handler('view_vars', 'page/layouts/widgets', [Views::class, 'filterWidgetLayoutVars']);
 
-// Replies
-	$replies_count = $entity->countReplies();
-	$can_reply = $entity->canReply();
+	// Update access picker based on group selection in the discussion form
+	elgg_register_ajax_view('input/discussions/access');
 
-	if ($can_reply) {
-		$menu[] = ElggMenuItem::factory(array(
-					'name' => 'replies',
-					'text' => elgg_echo('interactions:reply:create'),
-					'href' => "stream/replies/$entity->guid",
-					'priority' => 200,
-					'data-trait' => 'replies',
-					'item_class' => 'interactions-action',
-		));
-	}
+	// Allow admin only discussion creation in groups
+	add_group_tool_option('admin_only_discussions', elgg_echo('group:discussion:admin_only'), false);
 
-	if ($can_reply || $replies_count) {
-		$menu[] = ElggMenuItem::factory(array(
-					'name' => 'replies:badge',
-					'text' => elgg_view('framework/interactions/elements/badge', array(
-						'entity' => $entity,
-						'icon' => 'comments',
-						'type' => 'replies',
-						'count' => $replies_count,
-					)),
-					'href' => "stream/replies/$entity->guid",
-					'selected' => ($active_tab == 'replies'),
-					'priority' => 100,
-					'data-trait' => 'replies',
-					'item_class' => 'interactions-tab',
-		));
-	}
+	// Register site menu item
+	elgg_register_menu_item('site', [
+		'name' => 'discussion',
+		'href' => 'discussions',
+		'text' => elgg_echo('discussion'),
+	]);
+});
 
-	return $menu;
-}
 
-/**
- * Route stream page
- * 
- * @param string $hook   "route"
- * @param string $type   "stream"
- * @param array  $return Identifier and segments
- * @param array  $params Hook params
- * @return array
- */
-function hypediscussions_route_stream($hook, $type, $return, $params) {
-
-	$segments = elgg_extract('segments', $return);
-
-	switch ($segments[0]) {
-		case 'replies' :
-			echo elgg_view_resource('interactions/replies', [
-				'guid' => $segments[1],
-				'reply_guid' => $segments[2],
-			]);
-			return false;
-	}
-}
-
-/**
- * Route discussion page
- *
- * @param string $hook   "route"
- * @param string $type   "discussion"
- * @param array  $return Identifier and segments
- * @param array  $params Hook params
- * @return array
- */
-function hypediscussions_route_discussion($hook, $type, $return, $params) {
-
-	if (empty($return)) {
-		return;
-	}
-
-	$segments = elgg_extract('segments', $return);
-
-	switch ($segments[0]) {
-		case 'view' :
-			$reply_guid = get_entity($segments[1]);
-			if ($reply_guid) {
-				$reply = get_entity($reply_guid);
-				if (!$reply) {
-					return;
-				}
-			}
-			echo elgg_view_resource('interactions/replies', [
-				'guid' => $reply->container_guid,
-				'reply_guid' => $reply->guid,
-			]);
-			return false;
-	}
-}
-
-/**
- * Enable discussion threads
- *
- * @param string $hook   "permissions_check:comment"
- * @param string $type   "object"
- * @param bool   $return Can comment
- * @param array  $params Hook params
- * @return boolean
- */
-function hypediscussions_discussion_reply_comments($hook, $type, $return, $params) {
-
-	$entity = elgg_extract('entity', $params);
-
-	if ($entity instanceof \hypeJunction\DiscussionReply) {
-		$discussion = $entity->getContainerEntity();
-		$threads = $discussion->threads;
-		if (!$threads) {
-			return false;
-		}
-		return $discussion->canWriteToContainer(0, 'object', 'discussion_reply');
-	}
-}

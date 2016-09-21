@@ -27,7 +27,7 @@ $fields = [
 	],
 ];
 
-if (elgg_get_plugin_setting('enable_attachments', 'hypeInteractions')) {
+if (elgg_is_active_plugin('hypeAttachments') && hypeapps_allow_attachments('object', 'discussion')) {
 	$fields[] = [
 		'input' => 'attachments',
 		'name' => 'uploads',
@@ -42,6 +42,7 @@ $fields[] = [
 	'value' => elgg_extract('tags', $vars, $entity->tags),
 	'label' => elgg_echo('tags'),
 ];
+
 $fields[] = [
 	'input' => 'select',
 	'name' => 'status',
