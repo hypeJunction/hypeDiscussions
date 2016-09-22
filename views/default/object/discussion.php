@@ -19,8 +19,6 @@ if (!$poster) {
 	return;
 }
 
-$excerpt = elgg_get_excerpt($topic->description);
-
 $poster_icon = elgg_view_entity_icon($poster, 'tiny');
 
 $by_line = elgg_view('page/elements/by_line', $vars);
@@ -36,7 +34,7 @@ $num_replies = elgg_get_entities(array(
 	'container_guid' => $topic->getGUID(),
 	'count' => true,
 	'distinct' => false,
-		));
+));
 
 if ($num_replies != 0) {
 	$last_reply = elgg_get_entities(array(
@@ -84,15 +82,16 @@ if ($topic->status == 'closed') {
 	$status_indicator = elgg_format_element('span', [
 		'class' => 'discussion-closed-indicator',
 		'title' => elgg_echo('discussion:topic:closed'),
-			], elgg_view_icon('lock'));
+	], elgg_view_icon('lock'));
 }
 
-$title = elgg_view('output/url', array(
-	'href' => $topic->getURL(),
-	'text' => $topic->getDisplayName() . $status_indicator,
-		));
-
 if ($full) {
+
+	$title = elgg_view('output/url', array(
+		'href' => $topic->getURL(),
+		'text' => $topic->getDisplayName() . $status_indicator,
+	));
+
 	$subtitle = "$by_line $replies_link";
 
 	$params = array(
@@ -117,6 +116,30 @@ if ($full) {
 		'body' => $body,
 	));
 } else {
+
+	if (elgg_is_active_plugin('search') && get_input('query')) {
+
+		if ($topic->getVolatileData('search_matched_title')) {
+			$title = $topic->getVolatileData('search_matched_title');
+		} else {
+			$title = search_get_highlighted_relevant_substrings($topic->getDisplayName(), get_input('query'), 5, 5000);
+		}
+
+		if ($topic->getVolatileData('search_matched_description')) {
+			$excerpt = $topic->getVolatileData('search_matched_description');
+		} else {
+			$excerpt = search_get_highlighted_relevant_substrings($topic->description, get_input('query'), 5, 5000);
+		}
+	} else {
+		$title = $topic->getDisplayName();
+		$excerpt = elgg_get_excerpt($topic->description);
+	}
+
+	$title = elgg_view('output/url', array(
+		'href' => $topic->getURL(),
+		'text' => $title . $status_indicator,
+	));
+
 	// brief view
 	$subtitle = "$by_line $replies_link <span class=\"float-alt\">$reply_text</span>";
 
