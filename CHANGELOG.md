@@ -1,3 +1,18 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.0...v1.2.1) (2016-10-02)
+
+
+### Bug Fixes
+
+* **urls:** discussion replies URLs are working once again ([a0f677e](https://github.com/hypeJunction/hypeDiscussions/commit/a0f677e))
+* **ux:** browser can once again nagivate to group-replies hash ([d88a680](https://github.com/hypeJunction/hypeDiscussions/commit/d88a680))
+
+### Features
+
+* **search:** enable highlighting during search ([965c8bf](https://github.com/hypeJunction/hypeDiscussions/commit/965c8bf))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/hypeJunction/hypeDiscussions/compare/1.1.0...v1.2.0) (2016-09-21)
 
