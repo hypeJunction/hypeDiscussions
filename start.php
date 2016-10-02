@@ -23,6 +23,9 @@ elgg_register_event_handler('init', 'system', function() {
 	// Add a group picker before the discussions edit form
 	elgg_extend_view('forms/discussion/save', 'input/discussions/container', 100);
 
+	// Handle reply URLs
+	elgg_register_plugin_hook_handler('entity:url', 'object', [Router::class, 'urlHandler'], 600);
+	
 	// Register actions
 	elgg_register_action('discussion/save', __DIR__ . '/actions/discussion/save.php');
 	elgg_register_action('discussion/reply/save', __DIR__ . '/actions/discussion/reply/save.php');

@@ -2,6 +2,10 @@
 
 namespace hypeJunction\Discussions;
 
+use hypeJunction\Discussion;
+use hypeJunction\DiscussionReply;
+use hypeJunction\Interactions\InteractionsService;
+
 class Router {
 
 	/**
@@ -72,6 +76,39 @@ class Router {
 					'username' => $username,
 				]);
 				return false;
+
+			case 'reply' :
+				$subpage = array_shift($segments);
+				if ($subpage !== 'view') {
+					return;
+				}
+
+				$guid = array_shift($segments);
+
+				elgg_entity_gatekeeper($guid, 'object', DiscussionReply::SUBTYPE);
+
+				$reply = get_entity($guid);
+
+				elgg_entity_gatekeeper($reply->container_guid, 'object', Discussion::SUBTYPE);
+
+				$topic = $reply->getContainerEntity();
+
+				$offset_key = "replies_{$topic->guid}";
+
+				$count = $topic->countReplies();
+
+				$offset = InteractionsService::calculateOffset($count, $limit, $reply);
+				$limit = get_input('limit', InteractionsService::getLimit(!$full_view));
+
+				$topic_url = elgg_http_add_url_query_elements($topic->getURL());
+				$forward_url = elgg_http_add_url_query_elements($topic_url, [
+					$offset_key => $offset,
+					'limit' => $limit,
+				]) . "#elgg-object-$reply->guid";
+
+				forward($forward_url);
+				break;
+
 		}
 	}
 
@@ -110,4 +147,23 @@ class Router {
 		return false;
 	}
 
+	/**
+	 * Handles entity URLs
+	 *
+	 * @param string $hook   "entity:url"
+	 * @param string $type   "object"
+	 * @param string $url    Current URL
+	 * @param array  $params Hook params
+	 * @return string Filtered URL
+	 */
+	public static function urlHandler($hook, $type, $url, $params) {
+
+		$entity = elgg_extract('entity', $params);
+		
+		if (!$entity instanceof DiscussionReply) {
+			return;
+		}
+
+		return "discussion/reply/view/$entity->guid/$entity->container_guid";
+	}
 }

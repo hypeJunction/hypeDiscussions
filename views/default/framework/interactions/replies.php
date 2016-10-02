@@ -36,7 +36,7 @@ $offset = get_input($offset_key, null);
 $count = $entity->countReplies();
 
 if (!isset($offset)) {
-	$offset = InteractionsService::calculateOffset($count, $limit, $comment);
+	$offset = InteractionsService::calculateOffset($count, $limit, $reply);
 }
 
 $level = elgg_extract('level', $vars) ? : 1;
