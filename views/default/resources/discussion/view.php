@@ -11,6 +11,7 @@ $entity = get_entity($guid);
 elgg_group_gatekeeper(true, $entity->container_guid);
 
 $container = $entity->getContainerEntity();
+elgg_set_page_owner_guid($container->guid);
 
 if ($container instanceof ElggGroup) {
 	$owner_url = "discussion/group/$container->guid";

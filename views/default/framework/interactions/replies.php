@@ -21,7 +21,7 @@ if ($entity->status == 'closed') {
 	echo elgg_view('discussion/closed');
 }
 
-$full_view = elgg_extract('full_view', $vars, false);
+$full_view = elgg_extract('full_view', $vars, true);
 $show_form = elgg_extract('show_add_form', $vars, true) && $entity->canReply();
 $expand_form = elgg_extract('expand_form', $vars, !elgg_in_context('widgets'));
 
@@ -46,7 +46,7 @@ $options = array(
 	'subtypes' => array(DiscussionReply::SUBTYPE),
 	'container_guid' => $entity->guid,
 	'list_id' => "interactions-replies-{$entity->guid}",
-	'list_class' => 'interactions-comments-list',
+	'list_class' => 'interactions-comments-list elgg-comments',
 	'base_url' => elgg_normalize_url("stream/replies/$entity->guid"),
 	'limit' => $limit,
 	'offset' => $offset,

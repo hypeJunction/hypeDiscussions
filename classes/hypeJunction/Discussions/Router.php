@@ -83,31 +83,19 @@ class Router {
 					return;
 				}
 
+				$reply_guid = array_shift($segments);
 				$guid = array_shift($segments);
 
-				elgg_entity_gatekeeper($guid, 'object', DiscussionReply::SUBTYPE);
+				if (!$guid) {
+					$reply = get_entity($reply_guid);
+					$guid = $reply->container_guid;
+				}
 
-				$reply = get_entity($guid);
-
-				elgg_entity_gatekeeper($reply->container_guid, 'object', Discussion::SUBTYPE);
-
-				$topic = $reply->getContainerEntity();
-
-				$offset_key = "replies_{$topic->guid}";
-
-				$count = $topic->countReplies();
-
-				$offset = InteractionsService::calculateOffset($count, $limit, $reply);
-				$limit = get_input('limit', InteractionsService::getLimit(!$full_view));
-
-				$topic_url = elgg_http_add_url_query_elements($topic->getURL());
-				$forward_url = elgg_http_add_url_query_elements($topic_url, [
-					$offset_key => $offset,
-					'limit' => $limit,
-				]) . "#elgg-object-$reply->guid";
-
-				forward($forward_url);
-				break;
+				echo elgg_view_resource('discussion/view', [
+					'guid' => $guid,
+					'reply_guid' => $reply_guid,
+				]);
+				return false;
 
 		}
 	}
@@ -164,6 +152,7 @@ class Router {
 			return;
 		}
 
-		return "discussion/reply/view/$entity->guid/$entity->container_guid";
+		$url = "discussion/reply/view/{$entity->guid}/$entity->container_guid";
+		return elgg_normalize_url($url) . "#elgg-object-$entity->guid";
 	}
 }
