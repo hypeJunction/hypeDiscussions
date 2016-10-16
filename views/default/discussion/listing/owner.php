@@ -27,7 +27,7 @@ if ($entity instanceof ElggUser) {
 	// the entity that is working as a container. See #4878.
 	$options['owner_guid'] = (int) $entity->guid;
 } else {
-	$options['container_guid'] = (int) $entty->guid;
+	$options['container_guid'] = (int) $entity->guid;
 }
 
 $enable_sort = !elgg_in_context('widgets') && elgg_get_plugin_setting('enable_sort', 'hypeDiscussions');
