@@ -1,3 +1,15 @@
+<a name="1.2.5"></a>
+## [1.2.5](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.4...v1.2.5) (2016-10-26)
+
+
+### Bug Fixes
+
+* **permissions:** do not assume default group tool settings ([a7a0c8a](https://github.com/hypeJunction/hypeDiscussions/commit/a7a0c8a))
+* **permissions:** do not assume default group tool settings ([b9c4f25](https://github.com/hypeJunction/hypeDiscussions/commit/b9c4f25))
+* **permissions:** fix container permissions for non-group discussions ([aef56db](https://github.com/hypeJunction/hypeDiscussions/commit/aef56db))
+
+
+
 <a name="1.2.4"></a>
 ## [1.2.4](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.3...v1.2.4) (2016-10-16)
 
