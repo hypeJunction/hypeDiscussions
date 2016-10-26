@@ -85,11 +85,12 @@ class Permissions {
 		}
 
 		$group = $container->getContainerEntity();
-		if ($group instanceof ElggGroup && $group->forum_enable == 'no') {
-			return false;
+		if ($group instanceof ElggGroup) {
+			if ($group->forum_enable == 'no') {
+				return false;
+			}
+			return $group->canWriteToContainer($user->guid);
 		}
-		
-		return $group->canWriteToContainer($user->guid);
 	}
 
 }
