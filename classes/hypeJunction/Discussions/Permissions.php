@@ -54,14 +54,14 @@ class Permissions {
 				return false;
 			}
 			return;
-		}
+		} else {
+			if ($container->forum_enable != 'yes') {
+				return false;
+			}
 
-		if ($container->forum_enable != 'yes') {
-			return false;
-		}
-
-		if ($container->admin_only_discussions_enable == 'yes' && !$container->canEdit($user->guid)) {
-			return false;
+			if ($container->admin_only_discussions_enable == 'yes' && !$container->canEdit($user->guid)) {
+				return false;
+			}
 		}
 	}
 
