@@ -55,7 +55,7 @@ class Permissions {
 			}
 			return;
 		} else {
-			if ($container->forum_enable != 'yes') {
+			if ($container->forum_enable == 'no') {
 				return false;
 			}
 
