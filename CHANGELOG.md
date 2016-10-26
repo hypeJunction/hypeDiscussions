@@ -1,3 +1,13 @@
+<a name="1.2.6"></a>
+## [1.2.6](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.5...v1.2.6) (2016-10-26)
+
+
+### Bug Fixes
+
+* **permissions:** only validate container permissions for group discussions ([a1a08c6](https://github.com/hypeJunction/hypeDiscussions/commit/a1a08c6))
+
+
+
 <a name="1.2.5"></a>
 ## [1.2.5](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.4...v1.2.5) (2016-10-26)
 
