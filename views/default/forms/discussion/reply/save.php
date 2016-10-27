@@ -1,78 +1,92 @@
 <?php
 
 /**
- * Discussion reply form
+ * Discussion topic reply form body
  *
- * @uses $vars['topic']    Discussion topic
- * @uses $vars['entity']   Discussion reply
- * @uses $vars['fields']   Custom fields array
- * @uses $vars['controls'] Custom controls array
+ * @uses $vars['topic']  A discussion topic object
+ * @uses $vars['entity'] A discussion reply object
+ * @uses $vars['inline'] Display a shortened form?
  */
-$entity = elgg_extract('entity', $vars);
-$container = elgg_extract('topic', $vars);
+$topic = elgg_extract('topic', $vars);
+$reply = elgg_extract('entity', $vars);
+$inline = elgg_extract('inline', $vars, false);
 
-$fields = [
-	[
-		'input' => 'hidden',
-		'name' => 'topic_guid',
-		'value' => $container->guid,
-	],
-	[
-		'input' => 'hidden',
-		'name' => 'guid',
-		'value' => $entity->guid,
-	],
-	[
-		'input' => 'interactions/comment',
-		'name' => 'description',
-		'value' => $entity->description,
-		'placeholder' => $entity ? elgg_echo('discussion:reply:edit') : elgg_echo('reply:this'),
-	],
+$fields[] = [
+	'#type' => 'hidden',
+	'name' => 'topic_guid',
+	'value' => $topic ? $topic->guid : '',
+];
+
+$fields[] = [
+	'#type' => 'hidden',
+	'name' => 'guid',
+	'value' => $reply ? $reply->guid : '',
+];
+
+if ($reply) {
+	$label = elgg_echo('discussion:reply:edit');
+	$value = $reply->description;
+	$action = elgg_echo('save');
+} else {
+	$label = elgg_echo('reply:this');
+	$value = '';
+	$action = elgg_echo('reply');
+}
+
+$fields[] = [
+	'#type' => 'interactions/comment',
+	'name' => 'description',
+	'value' => $entity->description,
+	'placeholder' => $entity ? elgg_echo('discussion:reply:edit') : elgg_echo('reply:this'),
 ];
 
 if (elgg_get_plugin_setting('enable_attachments', 'hypeInteractions')) {
 	$fields[] = [
-		'input' => 'attachments',
+		'#type' => 'attachments',
 		'expand' => false,
 	];
 }
 
-$fields = elgg_extract('fields', $vars, $fields);
-
-$body = '';
-
-foreach ($fields as $field) {
-	$type = elgg_extract('input', $field, 'text');
-	unset($field['input']);
-	$body .= elgg_view_input($type, $field);
-}
-
-$controls = [
-	'cancel' => [
-		'input' => 'button',
-		'value' => elgg_echo('cancel'),
-		'class' => 'elgg-button-cancel',
-	],
-	'submit' => [
-		'input' => 'submit',
-		'value' => $entity ? elgg_echo('save') : elgg_echo('reply'),
-	],
+$buttons = [
+		[
+		'#type' => 'submit',
+		'value' => $action,
+	]
 ];
 
-if (!elgg_is_xhr() || !$entity instanceof hypeJunction\DiscussionReply) {
-	unset($controls['cancel']);
+if ($inline) {
+	$buttons[] = [
+		'#type' => 'button',
+		'type' => 'reset',
+		'text' => elgg_echo('cancel'),
+		'class' => 'elgg-button-cancel',
+	];
 }
 
-$controls = (array) elgg_extract('controls', $vars, $controls);
 
-$footer = '';
-foreach ($controls as $control) {
-	$type = elgg_extract('input', $control, 'text');
-	unset($control['input']);
-	$footer .= elgg_view_input($type, $control);
+$fields[] = [
+	'#type' => 'fieldset',
+	'fields' => $buttons,
+	'align' => 'horizontal',
+	'class' => 'elgg-foot',
+];
+
+$extensions = (array) elgg_extract('fields', $vars, []);
+
+$fields = array_merge($fields, $extensions);
+usort($fields, function($fa, $fb) {
+	$a = elgg_extract('priority', $fa, 500);
+	$b = elgg_extract('priority', $fb, 500);
+	if ($a == $b) {
+		return 0;
+	}
+	return ($a < $b) ? -1 : 1;
+});
+
+$body = '';
+foreach ($fields as $field) {
+	$body .= elgg_view_field($field);
 }
-
-$body .= elgg_format_element('div', ['class' => 'elgg-foot'], $footer);
 
 $owner = $entity->guid ? $entity->getOwnerEntity() : elgg_get_logged_in_user_entity();
 

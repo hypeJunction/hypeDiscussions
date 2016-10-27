@@ -6,6 +6,7 @@ if ($container_guid) {
 
 $dbprefix = elgg_get_config('dbprefix');
 $user = elgg_get_logged_in_user_entity();
+
 $groups = new ElggBatch('elgg_get_entities_from_relationship', array(
 	'relationship' => 'member',
 	'relationship_guid' => (int) $user->guid,
@@ -28,14 +29,10 @@ if (empty($options_values)) {
 asort($options_values);
 
 $placeholder = array('' => elgg_echo('discussion:group:container:select'));
-$options_values = $placeholder + $options_values;
+$vars['options_values'] = $placeholder + $options_values;
+$vars['class'] = 'selection-discussion-container';
 
-echo elgg_view_input('select', array(
-	'options_values' => $options_values,
-	'class' => 'select-discussion-container',
-	'required' => true,
-	'label' => elgg_echo('discussion:group:container'),
-));
+echo elgg_view('input/select', $vars);
 ?>
 <script>
 	require(['input/discussions/container']);

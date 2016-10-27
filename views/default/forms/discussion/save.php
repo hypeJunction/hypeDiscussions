@@ -10,107 +10,113 @@
 $guid = elgg_extract('guid', $vars, null);
 $entity = get_entity($guid);
 
-$fields = [
-	[
-		'input' => 'text',
-		'name' => 'title',
-		'value' => elgg_extract('title', $vars, $entity->title),
-		'label' => elgg_echo('title'),
-		'required' => true,
-	],
-	[
-		'input' => 'longtext',
-		'name' => 'description',
-		'value' => elgg_extract('description', $vars, $entity->description),
-		'label' => elgg_echo('discussion:topic:description'),
-		'required' => true,
-	],
-];
-
-if (elgg_is_active_plugin('hypeAttachments') && hypeapps_allow_attachments('object', 'discussion')) {
+if ($entity->container_guid) {
 	$fields[] = [
-		'input' => 'attachments',
-		'name' => 'uploads',
-		'expand' => true,
-		'label' => elgg_echo('discussion:topic:attachments'),
+		'#type' => 'hidden',
+		'name' => 'container_guid',
+		'value' => elgg_extract('container_guid', $vars, $entity->container_guid),
+	];
+} else {
+	$fields[] = [
+		'#type' => 'discussions/container',
+		'#label' => elgg_echo('discussion:group:container'),
+		'name' => 'container_guid',
+		'required' => true,
+		'value' => elgg_extract('container_guid'),
 	];
 }
 
 $fields[] = [
-	'input' => 'tags',
-	'name' => 'tags',
-	'value' => elgg_extract('tags', $vars, $entity->tags),
-	'label' => elgg_echo('tags'),
+	'#type' => 'text',
+	'#label' => elgg_echo('title'),
+	'name' => 'title',
+	'value' => elgg_extract('title', $vars, $entity->title),
+	'required' => true,
 ];
 
 $fields[] = [
-	'input' => 'select',
+	'#type' => 'longtext',
+	'#label' => elgg_echo('discussion:topic:description'),
+	'name' => 'description',
+	'value' => elgg_extract('description', $vars, $entity->description),
+	'required' => true,
+];
+
+if (elgg_is_active_plugin('hypeAttachments') && hypeapps_allow_attachments('object', 'discussion')) {
+	$fields[] = [
+		'#type' => 'attachments',
+		'#label' => elgg_echo('discussion:topic:attachments'),
+		'name' => 'uploads',
+		'expand' => true,
+	];
+}
+
+$fields[] = [
+	'#type' => 'tags',
+	'#label' => elgg_echo('tags'),
+	'name' => 'tags',
+	'value' => elgg_extract('tags', $vars, $entity->tags),
+];
+
+$fields[] = [
+	'#type' => 'select',
+	'#label' => elgg_echo('discussion:topic:status'),
 	'name' => 'status',
 	'value' => elgg_extract('status', $vars, $entity->status),
 	'options_values' => array(
 		'open' => elgg_echo('status:open'),
 		'closed' => elgg_echo('status:closed'),
 	),
-	'label' => elgg_echo('discussion:topic:status'),
 ];
 
 if (elgg_get_plugin_setting('max_comment_depth', 'hypeInteractions') > 1) {
 	$fields[] = [
-		'input' => 'select',
+		'#type' => 'select',
+		'#label' => elgg_echo('discussion:topic:enable_threads'),
 		'name' => 'threads',
 		'value' => $entity->threads,
 		'options_values' => array(
 			0 => elgg_echo('option:no'),
 			1 => elgg_echo('option:yes'),
 		),
-		'label' => elgg_echo('discussion:topic:enable_threads'),
 	];
 }
 
 $fields[] = [
-	'input' => 'access',
+	'#type' => 'access',
+	'#label' => elgg_echo('access'),
 	'name' => 'access_id',
 	'value' => elgg_extract('access_id', $vars, $entity ? $entity->access_id : ACCESS_DEFAULT),
 	'entity' => $entity,
 	'entity_type' => 'object',
 	'entity_subtype' => 'discussion',
-	'label' => elgg_echo('access'),
 ];
 
 $fields[] = [
-	'input' => 'hidden',
-	'name' => 'container_guid',
-	'value' => elgg_extract('container_guid', $vars, $entity->container_guid),
-];
-
-$fields[] = [
-	'input' => 'hidden',
+	'#type' => 'hidden',
 	'name' => 'topic_guid',
 	'value' => $guid,
 ];
 
-$fields = (array) elgg_extract('fields', $vars, $fields);
+$extensions = (array) elgg_extract('fields', $vars, []);
+
+$fields = array_merge($fields, $extensions);
+usort($fields, function($fa, $fb) {
+	$a = elgg_extract('priority', $fa, 500);
+	$b = elgg_extract('priority', $fb, 500);
+	if ($a == $b) {
+		return 0;
+	}
+	return ($a < $b) ? -1 : 1;
+});
 
 foreach ($fields as $field) {
-	$type = elgg_extract('input', $field, 'text');
-	unset($field['input']);
-	echo elgg_view_input($type, $field);
+	echo elgg_view_field($field);
 }
 
-$controls = [
-	[
-		'input' => 'submit',
-		'value' => elgg_echo('save'),
-	]
-];
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('save'),
+		]);
 
-$controls = (array) elgg_extract('controls', $vars, $controls);
-
-$footer = '';
-foreach ($controls as $control) {
-	$type = elgg_extract('input', $control, 'text');
-	unset($control['input']);
-	$footer .= elgg_view_input($type, $control);
-}
-
-echo elgg_format_element('div', ['class' => 'elgg-foot'], $footer);
+elgg_set_form_footer($footer);
