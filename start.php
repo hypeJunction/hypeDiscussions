@@ -35,6 +35,7 @@ elgg_register_event_handler('init', 'system', function() {
 
 	// Setup interactions menu for discussions
 	elgg_register_plugin_hook_handler('register', 'menu:interactions', [Menus::class, 'setupInteractionsMenu']);
+	elgg_register_plugin_hook_handler('register', 'menu:entity', [Menus::class, 'setupEntityMenu']);
 
 	// Route pages
 	elgg_register_plugin_hook_handler('route', 'stream', [Router::class, 'routeStream']);

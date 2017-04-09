@@ -63,4 +63,29 @@ class Menus {
 		return $menu;
 	}
 
+	/**
+	 * Setup entity menu
+	 *
+	 * @param string $hook   "register"
+	 * @param string $type   "menu:entity"
+	 * @param array  $menu   Menu
+	 * @param array  $params Hook parameters
+	 * @return array
+	 */
+	public static function setupEntityMenu($hook, $type, $menu, $params) {
+
+		$entity = elgg_extract('entity', $params);
+
+		if (!$entity instanceof \hypeJunction\DiscussionReply) {
+			return;
+		}
+
+		foreach ($menu as &$item) {
+			if ($item->getName() == 'edit') {
+				$item->addItemClass('interactions-edit-discussion-reply');
+			}
+		}
+
+		return $menu;
+	}
 }
