@@ -1,3 +1,13 @@
+<a name="1.2.7"></a>
+## [1.2.7](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.6...v1.2.7) (2017-04-09)
+
+
+### Bug Fixes
+
+* **js:** inline editing now works with popup menus ([a6205a8](https://github.com/hypeJunction/hypeDiscussions/commit/a6205a8))
+
+
+
 <a name="1.2.6"></a>
 ## [1.2.6](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.5...v1.2.6) (2016-10-26)
 
