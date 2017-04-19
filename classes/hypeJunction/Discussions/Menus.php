@@ -34,29 +34,29 @@ class Menus {
 
 		if ($can_reply) {
 			$menu[] = ElggMenuItem::factory(array(
-				'name' => 'replies',
-				'text' => elgg_echo('interactions:reply:create'),
-				'href' => "stream/replies/$entity->guid",
-				'priority' => 200,
-				'data-trait' => 'replies',
-				'item_class' => 'interactions-action',
+						'name' => 'replies',
+						'text' => elgg_echo('interactions:reply:create'),
+						'href' => "stream/replies/$entity->guid",
+						'priority' => 200,
+						'data-trait' => 'replies',
+						'item_class' => 'interactions-action',
 			));
 		}
 
 		if ($can_reply || $replies_count) {
 			$menu[] = ElggMenuItem::factory(array(
-				'name' => 'replies:badge',
-				'text' => elgg_view('framework/interactions/elements/badge', array(
-					'entity' => $entity,
-					'icon' => 'comments',
-					'type' => 'replies',
-					'count' => $replies_count,
-				)),
-				'href' => "stream/replies/$entity->guid",
-				'selected' => ($active_tab == 'replies'),
-				'priority' => 100,
-				'data-trait' => 'replies',
-				'item_class' => 'interactions-tab',
+						'name' => 'replies:badge',
+						'text' => elgg_view('framework/interactions/elements/badge', array(
+							'entity' => $entity,
+							'icon' => 'comments',
+							'type' => 'replies',
+							'count' => $replies_count,
+						)),
+						'href' => "stream/replies/$entity->guid",
+						'selected' => ($active_tab == 'replies'),
+						'priority' => 100,
+						'data-trait' => 'replies',
+						'item_class' => 'interactions-tab',
 			));
 		}
 
@@ -88,4 +88,35 @@ class Menus {
 
 		return $menu;
 	}
+
+	/**
+	 * Setup owner block menu
+	 *
+	 * @param string $hook   "register"
+	 * @param string $type   "menu:owner_block"
+	 * @param array  $menu   Menu
+	 * @param array  $params Hook parameters
+	 * @return array
+	 */
+	public static function setupOwnerBlock($hook, $type, $menu, $params) {
+
+		$entity = elgg_extract('entity', $params);
+
+		if (!$entity instanceof \ElggUser) {
+			return;
+		}
+
+		if (!elgg_get_plugin_setting('site_wide_discussions', 'hypeDiscussions')) {
+			return;
+		}
+
+		$menu[] = \ElggMenuItem::factory([
+			'name' => 'discussions',
+			'href' => "discussion/owner/$entity->username",
+			'text' => elgg_echo('discussion'),
+		]);
+
+		return $menu;
+	}
+
 }
