@@ -34,12 +34,12 @@ class DiscussionReply extends Interactions\Comment {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canComment($user_guid = 0) {
+	public function canComment($user_guid = 0, $default = null) {
 		$topic = $this->getOriginalContainer();
 		if ($topic->status == 'closed') {
 			return false;
 		}
-		return parent::canComment($user_guid);
+		return parent::canComment($user_guid, $default);
 	}
 
 	/**
