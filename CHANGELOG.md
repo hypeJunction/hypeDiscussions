@@ -1,3 +1,13 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/hypeJunction/hypeDiscussions/compare/2.0.0...v2.1.0) (2017-07-08)
+
+
+### Features
+
+* **ui:** integrate with hypeUI ([8cb670b](https://github.com/hypeJunction/hypeDiscussions/commit/8cb670b))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.7...v2.0.0) (2017-04-19)
 
