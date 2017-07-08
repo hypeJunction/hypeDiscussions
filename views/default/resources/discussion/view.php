@@ -26,13 +26,15 @@ $content = elgg_view_entity($entity, [
 	'full_view' => true,
 ]);
 
-$content .= elgg_view('discussion/replies', [
-	'topic' => $entity,
-	'reply' => get_entity($reply_guid),
-	'show_add_form' => $entity->canWriteToContainer(0, 'object', 'discussion_reply'),
-	'expand_form' => true,
-	'full_view' => true,
-]);
+if (!elgg_is_active_plugin('hypeUI')) {
+	$content .= elgg_view('discussion/replies', [
+		'topic' => $entity,
+		'reply' => get_entity($reply_guid),
+		'show_add_form' => $entity->canWriteToContainer(0, 'object', 'discussion_reply'),
+		'expand_form' => true,
+		'full_view' => true,
+	]);
+}
 
 $params = array(
 	'content' => $content,

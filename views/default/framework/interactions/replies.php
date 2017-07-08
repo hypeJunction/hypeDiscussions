@@ -17,8 +17,10 @@ if (!$entity instanceof Discussion) {
 	return true;
 }
 
-if ($entity->status == 'closed') {
-	echo elgg_view('discussion/closed');
+if (!elgg_is_active_plugin('hypeUI')) {
+	if ($entity->status == 'closed') {
+		echo elgg_view('discussion/closed');
+	}
 }
 
 $full_view = elgg_extract('full_view', $vars, true);
