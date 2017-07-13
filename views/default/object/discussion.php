@@ -4,9 +4,16 @@
  * Forum topic entity view
  */
 $full = elgg_extract('full_view', $vars, FALSE);
-$topic = elgg_extract('entity', $vars, FALSE);
+$entity = elgg_extract('entity', $vars, FALSE);
 
-if (!$topic) {
+if (!$entity) {
+	return;
+}
+
+if (!$entity->getOwnerEntity() || !$entity->getContainerEntity()) {
+	if ($full) {
+		forward(REFERRER);
+	}
 	return;
 }
 
