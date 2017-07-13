@@ -1,3 +1,25 @@
+<a name="2.1.1"></a>
+## [2.1.1](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.7...v2.1.1) (2017-07-13)
+
+
+### Bug Fixes
+
+* **classes:** canComment declaration now matches the signature of hte parent class ([a2f0b86](https://github.com/hypeJunction/hypeDiscussions/commit/a2f0b86))
+* **views:** bail on displaying a discussion if owner or container are not loadable ([bdce506](https://github.com/hypeJunction/hypeDiscussions/commit/bdce506)), closes [#5](https://github.com/hypeJunction/hypeDiscussions/issues/5)
+
+### Features
+
+* **menus:** add Discussions link to user owner block ([2b24ae9](https://github.com/hypeJunction/hypeDiscussions/commit/2b24ae9)), closes [#3](https://github.com/hypeJunction/hypeDiscussions/issues/3)
+* **releases:** upgrade for Elgg 2.3 ([e780501](https://github.com/hypeJunction/hypeDiscussions/commit/e780501))
+* **ui:** integrate with hypeUI ([8cb670b](https://github.com/hypeJunction/hypeDiscussions/commit/8cb670b))
+
+
+### BREAKING CHANGES
+
+* releases: Now requires Elgg 2.3 or higher
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/hypeJunction/hypeDiscussions/compare/2.0.0...v2.1.0) (2017-07-08)
 
