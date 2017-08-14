@@ -10,6 +10,7 @@ use hypeJunction\Discussions\Menus;
 use hypeJunction\Discussions\Permissions;
 use hypeJunction\Discussions\Router;
 use hypeJunction\Discussions\Views;
+use hypeJunction\Interactions\Notifications;
 
 require_once __DIR__ . '/autoloader.php';
 
@@ -72,6 +73,9 @@ elgg_register_event_handler('init', 'system', function() {
 		'href' => 'discussions',
 		'text' => elgg_echo('discussion'),
 	]);
+
+	elgg_register_notification_event('object', 'discussion_reply', array('create'));
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:discussion_reply', [Notifications::class, 'format']);
 });
 
 
