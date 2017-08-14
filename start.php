@@ -74,7 +74,8 @@ elgg_register_event_handler('init', 'system', function() {
 		'text' => elgg_echo('discussion'),
 	]);
 
-	elgg_register_notification_event('object', 'discussion_reply', array('create'));
+	elgg_register_notification_event('object', 'discussion_reply', ['create']);
+	elgg_unregister_plugin_hook_handler('prepare', 'notification:create:object:discussion_reply', 'discussion_prepare_reply_notification');
 	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:discussion_reply', [Notifications::class, 'format']);
 });
 
