@@ -1,3 +1,13 @@
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/hypeJunction/hypeDiscussions/compare/2.1.1...v2.1.2) (2017-08-14)
+
+
+### Bug Fixes
+
+* **notifications:** use hypeInteractions notifications formatter to prepare discussion reply notific ([ba35e3e](https://github.com/hypeJunction/hypeDiscussions/commit/ba35e3e))
+
+
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/hypeJunction/hypeDiscussions/compare/1.2.7...v2.1.1) (2017-07-13)
 
