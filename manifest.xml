@@ -39,6 +39,11 @@
 		<name>hypeInteractions</name>
 	</requires>
 
+	<requires>
+		<type>plugin</type>
+		<name>hypeLists</name>
+	</requires>
+
 	<provides>
 		<type>plugin</type>
 		<name>group_discussion</name>
