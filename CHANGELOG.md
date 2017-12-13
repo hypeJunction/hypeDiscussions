@@ -1,3 +1,13 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/hypeJunction/hypeDiscussions/compare/2.1.2...v2.2.0) (2017-12-13)
+
+
+### Features
+
+* **replies:** improve the display of replies ([5bb37c0](https://github.com/hypeJunction/hypeDiscussions/commit/5bb37c0))
+
+
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/hypeJunction/hypeDiscussions/compare/2.1.1...v2.1.2) (2017-08-14)
 
