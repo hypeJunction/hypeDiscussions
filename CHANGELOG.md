@@ -1,3 +1,13 @@
+<a name="2.2.1"></a>
+## [2.2.1](https://github.com/hypeJunction/hypeDiscussions/compare/2.2.0...v2.2.1) (2019-08-15)
+
+
+### Bug Fixes
+
+* **menus:** make sure reply and comment do not appear on the menu together ([8546944](https://github.com/hypeJunction/hypeDiscussions/commit/8546944))
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/hypeJunction/hypeDiscussions/compare/2.1.2...v2.2.0) (2017-12-13)
 
