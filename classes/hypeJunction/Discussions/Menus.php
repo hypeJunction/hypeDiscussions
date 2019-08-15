@@ -18,7 +18,6 @@ class Menus {
 	 * @return array
 	 */
 	public static function setupInteractionsMenu($hook, $type, $menu, $params) {
-
 		$entity = elgg_extract('entity', $params, false);
 		/* @var \hypeJunction\Discussion $entity */
 
@@ -58,6 +57,14 @@ class Menus {
 						'data-trait' => 'replies',
 						'item_class' => 'interactions-tab',
 			));
+		}
+
+		$remove = ['comments', 'comments:badge'];
+
+		foreach ($menu as $key => $item) {
+			if ($item instanceof ElggMenuItem && in_array($item->getName(), $remove)) {
+				unset($menu[$key]);
+			}
 		}
 
 		return $menu;

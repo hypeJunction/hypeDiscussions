@@ -35,7 +35,7 @@ elgg_register_event_handler('init', 'system', function() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 
 	// Setup interactions menu for discussions
-	elgg_register_plugin_hook_handler('register', 'menu:interactions', [Menus::class, 'setupInteractionsMenu']);
+	elgg_register_plugin_hook_handler('register', 'menu:interactions', [Menus::class, 'setupInteractionsMenu'], 700);
 	elgg_register_plugin_hook_handler('register', 'menu:entity', [Menus::class, 'setupEntityMenu']);
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', [Menus::class, 'setupOwnerBlock']);
 
